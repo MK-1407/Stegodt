@@ -1,0 +1,10 @@
+[package]
+name = "stegodt"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+colorama = "1.0.0"
+colored = "3.1.1"
+figlet-rs = "1.0.0"
+image = "0.25.10"
