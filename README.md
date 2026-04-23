@@ -4,11 +4,12 @@ A fast, command-line steganalysis tool that detects hidden data in images using 
 
 ## Overview
 
-Stegodt analyzes digital images to identify statistical anomalies commonly introduced by LSB (Least Significant Bit) steganography tools. It uses three complementary detection methods:
+Stegodt analyzes digital images to identify statistical anomalies commonly introduced by LSB (Least Significant Bit) steganography tools. It uses four complementary detection methods:
 
 - **Chi-Squared Analysis** - Statistical histogram analysis
 - **Odd-Even Analysis** - LSB parity pattern detection
 - **Pair Analysis** - Adjacent value frequency detection
+- **RS Analysis** - Regular-Singular multimask analysis
 
 ## Installation
 
@@ -31,6 +32,7 @@ stegodt <command> <image_path>
 | `odd` | Run odd-even LSB analysis |
 | `pair` | Run pair value analysis |
 | `chi` | Run chi-squared analysis |
+| `rs` | Run RS (Regular-Singular) analysis |
 | `complete` | Run all analyses with weighted score |
 
 ### Examples
@@ -43,6 +45,7 @@ stegodt complete suspicious.png
 stegodt chi image.jpg
 stegodt odd image.png
 stegodt pair image.bmp
+stegodt rs image.png
 ```
 
 ## Output Interpretation
@@ -51,10 +54,11 @@ When running `stegodt complete`, the tool outputs a suspicion score between 0.0 
 
 | Score Range | Result |
 |-------------|--------|
-| > 0.75 | **HIGH** confidence steganography detected |
-| > 0.50 | Moderate suspicion |
-| > 0.30 | Weak signal |
-| < 0.30 | Likely natural image |
+| > 0.80 | **HIGH** confidence steganography detected |
+| > 0.60 | Strong suspicion |
+| > 0.45 | Moderate suspicion |
+| > 0.25 | Weak signal |
+| < 0.25 | Likely natural image |
 
 ## Supported Formats
 
@@ -77,6 +81,9 @@ Natural images have uneven LSB distributions. Steganography tools often produce 
 
 ### Pair Analysis
 Measures frequency of adjacent pixel value pairs (2n, 2n+1). Hidden data tends to equalize pair frequencies.
+
+### RS Analysis
+Uses multimask classification (RS analysis) to estimate embedding rate. Groups of 4 pixels are classified as Regular (R) or Singular (S) based on local variance. Flipping LSBs causes predictable R↔S transitions. Natural images show different rates for positive/negative flips, while steganographic images show near-equal rates, revealing hidden data.
 
 ## Technical Details
 
