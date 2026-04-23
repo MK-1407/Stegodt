@@ -91,6 +91,22 @@ Uses multimask classification (RS analysis) to estimate embedding rate. Groups o
 - **Edition:** 2026
 - **Dependencies:** `image`, `colored`, `figlet-rs`
 
+## Known Issues & Challenges
+
+### False Positives
+The pair analysis component is currently prone to false positives. Natural images can show high pair equalization rates (60%+) due to natural pixel distributions, causing the tool to incorrectly flag them as suspicious. This is especially prevalent in images with smooth gradients or low contrast areas.
+
+### Current Test Results
+- **orignal.png**: Score 0.76 → False positive (Pair analysis triggers too aggressively)
+- **steg1.png**: Score 0.77 → Correct detection
+- **img.png**: Score 0.33 → Correct (natural image)
+
+### Areas for Improvement
+- Adjust pair analysis weighting thresholds
+- Implement per-image baseline calibration
+- Consider image content type (photo, synthetic, edited) in scoring
+- Add confidence intervals for small sample sizes
+
 ## License
 
 MIT
